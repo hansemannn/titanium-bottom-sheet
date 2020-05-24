@@ -1,39 +1,18 @@
-// This is a test harness for your module
-// You should do something interesting in this harness
-// to test out the module and to provide instructions
-// to users on how to use it by example.
+import TiBottomSheetDialog from 'ti.bottomsheetdialog';
 
-
-// open a single window
 var win = Ti.UI.createWindow({
-	backgroundColor:'white'
+    backgroundColor: '#fff'
 });
-var label = Ti.UI.createLabel();
-win.add(label);
+
+var btn = Ti.UI.createButton({
+    title: 'Show dialog'
+});
+
+btn.addEventListener('click', event => {
+    TiBottomSheetDialog.show({
+        view: Ti.UI.createView({ width: 300, height: 300, backgroundColor: 'red' })
+    });
+});
+
+win.add(btn);
 win.open();
-
-// TODO: write your module tests here
-var titanium_bottom_sheet_dialog = require('ti.bottomsheetdialog');
-Ti.API.info("module is => " + titanium_bottom_sheet_dialog);
-
-label.text = titanium_bottom_sheet_dialog.example();
-
-Ti.API.info("module exampleProp is => " + titanium_bottom_sheet_dialog.exampleProp);
-titanium_bottom_sheet_dialog.exampleProp = "This is a test value";
-
-if (Ti.Platform.name == "android") {
-	var proxy = titanium_bottom_sheet_dialog.createExample({
-		message: "Creating an example Proxy",
-		backgroundColor: "red",
-		width: 100,
-		height: 100,
-		top: 100,
-		left: 150
-	});
-
-	proxy.printMessage("Hello world!");
-	proxy.message = "Hi world!.  It's me again.";
-	proxy.printMessage("Hello world!");
-	win.add(proxy);
-}
-
