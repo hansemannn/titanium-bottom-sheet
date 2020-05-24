@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 4
+architectures: arm64-v8a armeabi-v7a x86 x86_64
+description: titanium-bottom-sheet-dialog
+author: Hans Knoechel
+license: Specify your license
+copyright: Copyright (c) 2020 by Your Company
+
+# these should not be edited
+name: titanium-bottom-sheet-dialog
+moduleid: ti.bottomsheetdialog
+guid: ec3218bf-3552-4c5d-b847-1d549815be94
+platform: android
+minsdk: 9.0.2.GA
