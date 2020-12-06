@@ -1,0 +1,6 @@
+<Alloy>
+	<Window backgroundColor="white" theme="MaterialTheme">
+		<Button title="    Show Dialog    " onClick="showDialog"/>
+		<Button bottom="20" title="    Close Dialog    " onClick="closeDialog"/>
+	</Window>
+</Alloy>

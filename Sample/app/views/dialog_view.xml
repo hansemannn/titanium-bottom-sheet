@@ -1,0 +1,26 @@
+<Alloy>
+	<View width="Ti.UI.FILL" height="Ti.UI.SIZE" layout="vertical">
+		<Label color="magenta" text="List Item First"/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label id="closeLabel" text="Close Dialog" />
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label/>
+		<Label bottom="20" color="brown" text="List Item Last"/>
+	</View>
+</Alloy>
