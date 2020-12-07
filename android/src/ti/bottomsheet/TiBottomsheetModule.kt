@@ -1,18 +1,16 @@
 package ti.bottomsheet
 
-import android.util.Log
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.core.widget.NestedScrollView
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import org.appcelerator.kroll.KrollDict
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.appcelerator.kroll.KrollModule
-import org.appcelerator.kroll.annotations.Kroll.method
+import org.appcelerator.kroll.annotations.Kroll.constant
 import org.appcelerator.kroll.annotations.Kroll.module
-import org.appcelerator.titanium.TiApplication
-import org.appcelerator.titanium.proxy.TiViewProxy
 
 @module(name = "TiBottomsheet", id = "ti.bottomsheet")
 class TiBottomsheetModule: KrollModule() {
-
+    companion object {
+        @constant const val SHEET_STATE_EXPANDED = BottomSheetBehavior.STATE_EXPANDED
+        @constant const val SHEET_STATE_COLLAPSED = BottomSheetBehavior.STATE_COLLAPSED
+        @constant const val SHEET_STATE_HIDDEN = BottomSheetBehavior.STATE_HIDDEN
+        @constant const val SHEET_STATE_HALF_EXPANDED = BottomSheetBehavior.STATE_HALF_EXPANDED
+    }
 }

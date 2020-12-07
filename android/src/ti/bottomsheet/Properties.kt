@@ -6,4 +6,5 @@ object Properties {
     const val CANCELED_ON_TOUCH_OUTSIDE = "canceledOnTouchOutside"
     const val BACKGROUND_COLOR = "backgroundColor"
     const val PEEK_HEIGHT = "peekHeight"
+    const val SHEET_STATE = "sheetState"
 }

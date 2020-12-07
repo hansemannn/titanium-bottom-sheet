@@ -88,6 +88,7 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
             Properties.CANCELED_ON_TOUCH_OUTSIDE -> bottomSheetDialog?.setCanceledOnTouchOutside(TiConvert.toBoolean(value))
             Properties.CANCELABLE -> bottomSheetDialog?.setCancelable(TiConvert.toBoolean(value))
             Properties.PEEK_HEIGHT -> bottomSheetDialog?.behavior?.peekHeight = TiConvert.toInt(value)
+            Properties.SHEET_STATE -> bottomSheetDialog?.behavior?.state = TiConvert.toInt(value)
         }
     }
 
