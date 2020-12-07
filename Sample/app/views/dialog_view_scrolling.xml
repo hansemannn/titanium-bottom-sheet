@@ -9,6 +9,8 @@
 		<Label id="label" color="red" text="Move slider above to change me"/>
 		<View width="300" height="120" backgroundColor="aqua"/>
 
+		<TextField width="Ti.UI.FILL" left="20" right="20" height="Ti.UI.SIZE" hintText="Type in TextField…" color="black"/>
+
 		<Button top="20" color="white" backgroundColor="red">Button</Button>
 
 		<Picker id="picker" selectionIndicator="true" width="Ti.UI.FILL" left="24" right="24" height="48" top="50" onChange="onChange" backgroundColor="blue">
@@ -27,6 +29,8 @@
 		</Picker>
 
 		<ImageView width="200" height="150" top="20" image="https://placeimg.com/640/480/any"/>
+
+		<TextArea width="Ti.UI.FILL" left="20" right="20" height="120" hintText="Type in TextArea…" color="black"/>
 
 		<ImageView width="200" height="150" top="20" bottom="20" image="https://placeimg.com/640/480/any"/>
 
