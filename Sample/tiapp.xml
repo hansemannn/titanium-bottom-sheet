@@ -50,7 +50,7 @@
     <android>
     </android>
     <modules>
-    	<module platform="android">ti.bottomsheet</module>
+        <module platform="android" version="1.0.0">ti.bottomsheet</module>
     </modules>
     <deployment-targets>
         <target device="android">true</target>

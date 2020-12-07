@@ -5,14 +5,14 @@
 version: 1.0.0
 apiversion: 4
 architectures: arm64-v8a armeabi-v7a x86 x86_64
-description: titanium-bottom-sheet
+description: ti-bottomsheet
 author: Hans Knoechel
 license: Specify your license
 copyright: Copyright (c) 2020 by Your Company
 
 # these should not be edited
-name: titanium-bottom-sheet
+name: ti-bottomsheet
 moduleid: ti.bottomsheet
-guid: ec3218bf-3552-4c5d-b847-1d549815be94
+guid: e53aa582-202d-4276-8800-406ec7d78960
 platform: android
 minsdk: 9.0.0.GA
