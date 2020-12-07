@@ -14,7 +14,8 @@ function showDialog(e) {
         cancelable: true,               // optional: default true
         backgroundColor: 'transparent', // optional: default `white` || for rounded-corners -> set backgroundColor to `transparent` + apply `bottomSheetDialogTheme`
         canceledOnTouchOutside: true,   // optional: default true
-        peekHeight: Ti.Platform.displayCaps.logicalDensityFactor * 100   // optional: default auto handled by library…… but pass pixels
+        sheetState: TiBottomSheet.SHEET_STATE_EXPANDED,
+        // peekHeight: Ti.Platform.displayCaps.logicalDensityFactor * 100   // optional: default auto handled by library…… but pass pixels
     });
     dialog.addEventListener('open', function (e) {
         Ti.UI.createNotification({

@@ -13,6 +13,6 @@ copyright: Copyright (c) 2020 by Your Company
 # these should not be edited
 name: ti-bottomsheet
 moduleid: ti.bottomsheet
-guid: e53aa582-202d-4276-8800-406ec7d78960
+guid: ec3218bf-3552-4c5d-b847-1d549815be94
 platform: android
 minsdk: 9.0.0.GA
