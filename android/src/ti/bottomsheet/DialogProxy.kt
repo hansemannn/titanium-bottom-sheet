@@ -1,11 +1,8 @@
 package ti.bottomsheet
 
-import android.util.Log
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.widget.NestedScrollView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.appcelerator.kroll.KrollDict
 import org.appcelerator.kroll.KrollPropertyChange
@@ -17,7 +14,7 @@ import org.appcelerator.titanium.proxy.TiViewProxy
 import org.appcelerator.titanium.util.TiConvert
 import org.appcelerator.titanium.view.TiUIView
 
-@Kroll.proxy(creatableInModule = TitaniumBottomSheetModule::class, propertyAccessors = [
+@Kroll.proxy(creatableInModule = TiBottomsheetModule::class, propertyAccessors = [
     Properties.CANCELABLE,
     Properties.CANCELED_ON_TOUCH_OUTSIDE,
     Properties.BACKGROUND_COLOR
