@@ -37,7 +37,7 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
 
         bottomSheetDialog = BottomSheetDialog(TiApplication.getAppCurrentActivity()).apply {
             dismissWithAnimation = true
-            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             setCancelable(Utils.getBoolean(this@DialogProxy.properties, "cancelable", true))
             setCanceledOnTouchOutside(Utils.getBoolean(this@DialogProxy.properties, "canceledOnTouchOutside", true))
             setOnShowListener {
