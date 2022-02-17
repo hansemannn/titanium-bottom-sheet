@@ -1,6 +1,7 @@
 package ti.bottomsheet
 
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -36,6 +37,7 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
 
         bottomSheetDialog = BottomSheetDialog(TiApplication.getAppCurrentActivity()).apply {
             dismissWithAnimation = true
+            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
             setCancelable(Utils.getBoolean(this@DialogProxy.properties, "cancelable", true))
             setCanceledOnTouchOutside(Utils.getBoolean(this@DialogProxy.properties, "canceledOnTouchOutside", true))
             setOnShowListener {

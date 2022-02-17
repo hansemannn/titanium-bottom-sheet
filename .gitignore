@@ -26,9 +26,9 @@ android/ant_clean
 android/.classpath
 android/.settings
 android/launch-*
+android/dist
 nbproject
 /metadata.json
-/ios/firebase.core-iphone-*.zip
 /ios/metadata.json
 /android/java-sources.txt
 /ios/dist
