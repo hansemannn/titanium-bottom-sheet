@@ -7,4 +7,5 @@ object Properties {
     const val BACKGROUND_COLOR = "backgroundColor"
     const val PEEK_HEIGHT = "peekHeight"
     const val SHEET_STATE = "sheetState"
+    const val DRAGGABLE = "draggable"
 }

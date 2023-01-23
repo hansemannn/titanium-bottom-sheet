@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.core.widget.NestedScrollView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.appcelerator.kroll.KrollDict
 import org.appcelerator.kroll.KrollPropertyChange
@@ -18,7 +19,8 @@ import org.appcelerator.titanium.view.TiUIView
 @Kroll.proxy(creatableInModule = TiBottomsheetModule::class, propertyAccessors = [
     Properties.CANCELABLE,
     Properties.CANCELED_ON_TOUCH_OUTSIDE,
-    Properties.BACKGROUND_COLOR
+    Properties.BACKGROUND_COLOR,
+    Properties.DRAGGABLE
 ])
 class DialogProxy: KrollProxy(), KrollProxyListener {
     private var bottomSheetDialog: BottomSheetDialog? = null
@@ -26,6 +28,7 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
     private var titaniumView: TiUIView? = null
 
     init {
+        defaultValues[Properties.DRAGGABLE] = true
         defaultValues[Properties.CANCELABLE] = true
         defaultValues[Properties.CANCELED_ON_TOUCH_OUTSIDE] = true
         defaultValues[Properties.BACKGROUND_COLOR] = "#ffffff"
@@ -37,6 +40,7 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
 
         bottomSheetDialog = BottomSheetDialog(TiApplication.getAppCurrentActivity()).apply {
             dismissWithAnimation = true
+
             window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             setCancelable(Utils.getBoolean(this@DialogProxy.properties, "cancelable", true))
             setCanceledOnTouchOutside(Utils.getBoolean(this@DialogProxy.properties, "canceledOnTouchOutside", true))
@@ -80,7 +84,7 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
             Properties.VIEW -> {
                 if (nestedScrollView != null && bottomSheetDialog != null) {
                     titaniumView = (value as TiViewProxy).orCreateView
-                    nestedScrollView!!.addView(titaniumView?.outerView)
+                    nestedScrollView!!.addView(titaniumView!!.outerView)
                     nestedScrollView!!.requestLayout()
                     nestedScrollView!!.invalidate()
                     bottomSheetDialog!!.setContentView(nestedScrollView!!)
@@ -91,6 +95,7 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
             Properties.CANCELABLE -> bottomSheetDialog?.setCancelable(TiConvert.toBoolean(value))
             Properties.PEEK_HEIGHT -> bottomSheetDialog?.behavior?.peekHeight = TiConvert.toInt(value)
             Properties.SHEET_STATE -> bottomSheetDialog?.behavior?.state = TiConvert.toInt(value)
+            Properties.DRAGGABLE -> bottomSheetDialog?.behavior?.isDraggable = TiConvert.toBoolean(value, true)
         }
     }
 
