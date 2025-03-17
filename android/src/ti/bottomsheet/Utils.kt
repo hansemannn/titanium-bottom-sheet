@@ -3,14 +3,11 @@ package ti.bottomsheet
 import android.content.Context
 import org.appcelerator.kroll.KrollDict
 import org.appcelerator.titanium.TiApplication
+import org.appcelerator.titanium.TiBaseActivity
 import org.appcelerator.titanium.util.TiConvert
 import org.appcelerator.titanium.util.TiRHelper
 
 object Utils {
-    @JvmStatic fun getContext(): Context {
-        return TiApplication.getAppCurrentActivity()
-    }
-
     @JvmStatic fun getR(path: String?): Int {
         return try {
             TiRHelper.getResource(path)

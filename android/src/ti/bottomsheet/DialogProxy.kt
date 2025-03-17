@@ -1,17 +1,18 @@
 package ti.bottomsheet
 
+import android.app.Activity
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.core.widget.NestedScrollView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.appcelerator.kroll.KrollDict
 import org.appcelerator.kroll.KrollPropertyChange
 import org.appcelerator.kroll.KrollProxy
 import org.appcelerator.kroll.KrollProxyListener
 import org.appcelerator.kroll.annotations.Kroll
-import org.appcelerator.titanium.TiApplication
+import org.appcelerator.kroll.common.Log
+import org.appcelerator.titanium.TiBaseActivity
 import org.appcelerator.titanium.proxy.TiViewProxy
 import org.appcelerator.titanium.util.TiConvert
 import org.appcelerator.titanium.view.TiUIView
@@ -23,6 +24,7 @@ import org.appcelerator.titanium.view.TiUIView
     Properties.DRAGGABLE
 ])
 class DialogProxy: KrollProxy(), KrollProxyListener {
+    private val TAG = "BottomSheetDialog"
     private var bottomSheetDialog: BottomSheetDialog? = null
     private var nestedScrollView: NestedScrollView? = null
     private var titaniumView: TiUIView? = null
@@ -33,13 +35,15 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
         defaultValues[Properties.CANCELED_ON_TOUCH_OUTSIDE] = true
         defaultValues[Properties.BACKGROUND_COLOR] = "#ffffff"
 
-        nestedScrollView = NestedScrollView(Utils.getContext()).apply {
+        val currentActivity = getActivity() as TiBaseActivity
+
+        nestedScrollView = NestedScrollView(currentActivity).apply {
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             setBackgroundColor(Utils.getColor(this@DialogProxy.properties, "backgroundColor"))
         }
 
-        bottomSheetDialog = BottomSheetDialog(TiApplication.getAppCurrentActivity()).apply {
-            dismissWithAnimation = true
+        bottomSheetDialog = BottomSheetDialog(currentActivity).apply {
+            dismissWithAnimation = false
 
             window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             setCancelable(Utils.getBoolean(this@DialogProxy.properties, "cancelable", true))
@@ -48,6 +52,9 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
                 this@DialogProxy.fireEvent("open", null)
             }
             setOnDismissListener {
+                // Clear the listener when the dialog is closed by user gesture.
+                unregisterLifecycleListener()
+
                 this@DialogProxy.fireEvent("close", null)
                 nestedScrollView?.removeAllViews()
                 bottomSheetDialog = null
@@ -99,13 +106,51 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
         }
     }
 
+    override fun onDestroy(activity: Activity?) {
+        hide()
+        super.onDestroy(activity)
+    }
+
     @Kroll.method
     fun show() {
-        bottomSheetDialog?.show()
+        bottomSheetDialog?.let {
+            if (!it.isShowing) {
+                it.show()
+
+                // Register lifecycle listener only when the dialog is shown.
+                registerLifecycleListener()
+            }
+        }
     }
 
     @Kroll.method
     fun hide() {
-        bottomSheetDialog?.cancel()
+        try {
+            bottomSheetDialog?.dismiss()
+        } catch (iae: IllegalArgumentException) {
+            Log.d(TAG, "IllegalArgumentException error in hiding the bottom-sheet dialog : $iae")
+        } catch (e: Exception) {
+            Log.d(TAG, "Unknown error in hiding the bottom-sheet dialog : $e")
+        }
+    }
+
+    // Receive activity lifecycle events to close the dialog, and to avoid its activity memory leak.
+    private fun registerLifecycleListener() {
+        // Try to unregister any previously added listener first.
+        unregisterLifecycleListener()
+
+        (getActivity() as? TiBaseActivity)?.addOnLifecycleEventListener(this)
+    }
+
+    /**
+     * Clean up the lifecycle listener in following cases:
+     * 1. When the dialog is closed programmatically by calling its hide() method.
+     * 2. When the dialog's activity is destroyed programmatically, or forcefully by the Android OS.
+     * 3. When the dialog is closed by user gesture.
+     * It requires a fix in the SDK (not available until 12.6.3.GA at least) to remove an already registered listener.
+     * Though without this fix, this call will silently fail and won't cause memory leaks.
+     */
+    private fun unregisterLifecycleListener() {
+        (activity?.get() as? TiBaseActivity)?.removeOnLifecycleEventListener(this)
     }
 }
