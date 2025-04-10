@@ -42,9 +42,9 @@ object Utils {
 
     @JvmStatic fun getColor(krollDict: KrollDict, key: String): Int {
         return if (krollDict.containsKeyAndNotNull(key)) {
-            TiConvert.toColor(krollDict[key] as String?)
+            TiConvert.toColor(krollDict[key] as String?, TiApplication.getAppCurrentActivity())
         } else {
-            TiConvert.toColor("white")
+            TiConvert.toColor("white", TiApplication.getAppCurrentActivity())
         }
     }
 }

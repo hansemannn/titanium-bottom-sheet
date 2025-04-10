@@ -12,6 +12,7 @@ import org.appcelerator.kroll.KrollProxy
 import org.appcelerator.kroll.KrollProxyListener
 import org.appcelerator.kroll.annotations.Kroll
 import org.appcelerator.kroll.common.Log
+import org.appcelerator.titanium.TiApplication
 import org.appcelerator.titanium.TiBaseActivity
 import org.appcelerator.titanium.proxy.TiViewProxy
 import org.appcelerator.titanium.util.TiConvert
@@ -97,7 +98,7 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
                     bottomSheetDialog!!.setContentView(nestedScrollView!!)
                 }
             }
-            Properties.BACKGROUND_COLOR -> nestedScrollView?.setBackgroundColor(TiConvert.toColor(value as String))
+            Properties.BACKGROUND_COLOR -> nestedScrollView?.setBackgroundColor(TiConvert.toColor(value as String, getActivity()))
             Properties.CANCELED_ON_TOUCH_OUTSIDE -> bottomSheetDialog?.setCanceledOnTouchOutside(TiConvert.toBoolean(value))
             Properties.CANCELABLE -> bottomSheetDialog?.setCancelable(TiConvert.toBoolean(value))
             Properties.PEEK_HEIGHT -> bottomSheetDialog?.behavior?.peekHeight = TiConvert.toInt(value)
