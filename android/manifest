@@ -2,7 +2,7 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.2.1
+version: 2.0.0
 apiversion: 4
 architectures: arm64-v8a armeabi-v7a x86 x86_64
 description: ti-bottomsheet
@@ -15,4 +15,4 @@ name: ti-bottomsheet
 moduleid: ti.bottomsheet
 guid: ec3218bf-3552-4c5d-b847-1d549815be94
 platform: android
-minsdk: 10.0.0
+minsdk: 13.0.0
