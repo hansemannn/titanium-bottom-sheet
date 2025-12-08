@@ -1,13 +1,16 @@
 package ti.bottomsheet
 
-import android.content.Context
 import org.appcelerator.kroll.KrollDict
 import org.appcelerator.titanium.TiApplication
-import org.appcelerator.titanium.TiBaseActivity
 import org.appcelerator.titanium.util.TiConvert
 import org.appcelerator.titanium.util.TiRHelper
 
 object Utils {
+    @JvmStatic fun dpToPx(value: Any?): Float {
+        val density = TiApplication.getAppCurrentActivity().resources.displayMetrics.density
+        return density * TiConvert.toFloat(value, 0f)
+    }
+
     @JvmStatic fun getR(path: String?): Int {
         return try {
             TiRHelper.getResource(path)
