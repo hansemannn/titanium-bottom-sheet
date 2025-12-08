@@ -1,18 +1,23 @@
 package ti.bottomsheet
 
 import android.app.Activity
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import org.appcelerator.kroll.KrollDict
 import org.appcelerator.kroll.KrollPropertyChange
 import org.appcelerator.kroll.KrollProxy
 import org.appcelerator.kroll.KrollProxyListener
 import org.appcelerator.kroll.annotations.Kroll
 import org.appcelerator.kroll.common.Log
-import org.appcelerator.titanium.TiApplication
 import org.appcelerator.titanium.TiBaseActivity
 import org.appcelerator.titanium.proxy.TiViewProxy
 import org.appcelerator.titanium.util.TiConvert
@@ -22,13 +27,15 @@ import org.appcelerator.titanium.view.TiUIView
     Properties.CANCELABLE,
     Properties.CANCELED_ON_TOUCH_OUTSIDE,
     Properties.BACKGROUND_COLOR,
-    Properties.DRAGGABLE
+    Properties.DRAGGABLE,
+    Properties.BORDER_RADIUS
 ])
 class DialogProxy: KrollProxy(), KrollProxyListener {
     private val TAG = "BottomSheetDialog"
     private var bottomSheetDialog: BottomSheetDialog? = null
     private var nestedScrollView: NestedScrollView? = null
     private var titaniumView: TiUIView? = null
+    private var dialogShown = false
 
     init {
         defaultValues[Properties.DRAGGABLE] = true
@@ -40,27 +47,33 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
 
         nestedScrollView = NestedScrollView(currentActivity).apply {
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            setBackgroundColor(Utils.getColor(this@DialogProxy.properties, "backgroundColor"))
+            setBackgroundColor(Utils.getColor(this@DialogProxy.properties, Properties.BACKGROUND_COLOR))
         }
 
         bottomSheetDialog = BottomSheetDialog(currentActivity).apply {
             dismissWithAnimation = false
 
-            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            setCancelable(Utils.getBoolean(this@DialogProxy.properties, "cancelable", true))
-            setCanceledOnTouchOutside(Utils.getBoolean(this@DialogProxy.properties, "canceledOnTouchOutside", true))
+            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+            setCancelable(Utils.getBoolean(this@DialogProxy.properties, Properties.CANCELABLE, true))
+            setCanceledOnTouchOutside(Utils.getBoolean(this@DialogProxy.properties, Properties.CANCELED_ON_TOUCH_OUTSIDE, true))
             setOnShowListener {
+                dialogShown = true
+                applyCornerRadius()
                 this@DialogProxy.fireEvent("open", null)
             }
             setOnDismissListener {
                 // Clear the listener when the dialog is closed by user gesture.
                 unregisterLifecycleListener()
 
-                this@DialogProxy.fireEvent("close", null)
+                dialogShown = false
+                titaniumView?.release()
                 nestedScrollView?.removeAllViews()
-                bottomSheetDialog = null
-                nestedScrollView = null
+
                 titaniumView = null
+                nestedScrollView = null
+                bottomSheetDialog = null
+
+                this@DialogProxy.fireEvent("close", null)
             }
         }
 
@@ -101,9 +114,44 @@ class DialogProxy: KrollProxy(), KrollProxyListener {
             Properties.BACKGROUND_COLOR -> nestedScrollView?.setBackgroundColor(TiConvert.toColor(value as String, getActivity()))
             Properties.CANCELED_ON_TOUCH_OUTSIDE -> bottomSheetDialog?.setCanceledOnTouchOutside(TiConvert.toBoolean(value))
             Properties.CANCELABLE -> bottomSheetDialog?.setCancelable(TiConvert.toBoolean(value))
-            Properties.PEEK_HEIGHT -> bottomSheetDialog?.behavior?.peekHeight = TiConvert.toInt(value)
+            Properties.PEEK_HEIGHT -> bottomSheetDialog?.behavior?.peekHeight = Utils.dpToPx(value).toInt()
             Properties.SHEET_STATE -> bottomSheetDialog?.behavior?.state = TiConvert.toInt(value)
             Properties.DRAGGABLE -> bottomSheetDialog?.behavior?.isDraggable = TiConvert.toBoolean(value, true)
+            Properties.BORDER_RADIUS -> if (dialogShown) applyCornerRadius()
+        }
+    }
+
+    private fun applyCornerRadius() {
+        try {
+            val sheet =
+                bottomSheetDialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+                    ?: return
+
+            val radiusDp = Utils.getInt(properties, Properties.BORDER_RADIUS, 28)
+            val radiusPx = Utils.dpToPx(radiusDp)
+            val colorInt = Utils.getColor(this@DialogProxy.properties, Properties.BACKGROUND_COLOR)
+
+            val shapeAppearanceBuilder = if (sheet.background is MaterialShapeDrawable) {
+                (sheet.background as MaterialShapeDrawable).shapeAppearanceModel.toBuilder()
+            } else {
+                ShapeAppearanceModel.Builder()
+            }
+
+            val shapeAppearance = shapeAppearanceBuilder
+                .setTopLeftCorner(CornerFamily.ROUNDED, radiusPx)
+                .setTopRightCorner(CornerFamily.ROUNDED, radiusPx)
+                .build()
+
+            // Disable child view background to show radius on sheet.
+            sheet.getChildAt(0)?.setBackgroundColor(Color.TRANSPARENT)
+
+            sheet.clipToOutline = true
+            sheet.background = MaterialShapeDrawable(shapeAppearance).apply {
+                fillColor = ColorStateList.valueOf(colorInt)
+                elevation = sheet.elevation
+            }
+        } catch (exc: Exception) {
+            Log.d(TAG, "Could not apply borderRadius. Error: $exc")
         }
     }
 

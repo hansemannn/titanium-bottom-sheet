@@ -8,4 +8,5 @@ object Properties {
     const val PEEK_HEIGHT = "peekHeight"
     const val SHEET_STATE = "sheetState"
     const val DRAGGABLE = "draggable"
+    const val BORDER_RADIUS = "borderRadius"
 }
